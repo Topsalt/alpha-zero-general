@@ -11,6 +11,36 @@ python main.py
 ```
 Choose your framework and game in ```main.py```.
 
+### 代码库导览（中文）
+
+如果你想快速理解这个仓库，可以按下面的结构看：
+
+- 根目录核心抽象与训练流程  
+  - `Game.py`：定义“游戏环境”统一接口（状态、动作、胜负判断、对称变换等）。  
+  - `NeuralNet.py`：定义“神经网络包装器”统一接口（训练、预测、保存/加载模型）。  
+  - `MCTS.py`：实现蒙特卡洛树搜索（AlphaZero 决策核心）。  
+  - `Coach.py`：实现自对弈训练主循环（采样、训练、模型对比与更新）。  
+  - `Arena.py`：让两个玩家/策略对战，用于评估模型强弱。  
+  - `main.py`：训练入口；组装 `Game`、`NNet` 和训练参数后启动 `Coach`。  
+  - `pit.py`：对弈入口（人机或模型互搏）。  
+
+- 各游戏目录（如 `othello/`、`connect4/`、`tictactoe/`、`gobang/`、`tafl/`、`rts/`、`dotsandboxes/`）  
+  每个目录通常包含：  
+  - `*Game.py`：该游戏对 `Game` 接口的具体实现；  
+  - `keras/`、`pytorch/`（视游戏而定）：该游戏的网络结构与 `NNetWrapper`；  
+  - `README.md`：该游戏的单独说明与实验信息。  
+
+- 预训练与环境  
+  - `pretrained_models/`：示例/预训练模型。  
+  - `requirements.txt`：Python 依赖（含 TensorFlow/Keras 与 PyTorch）。  
+  - `docker/`、`setup_env.sh`：容器化运行环境支持。  
+
+关键技术栈与组织方式：
+
+- 算法：AlphaZero 风格“自对弈 + MCTS + 神经网络策略价值联合学习”。  
+- 框架：同一套算法抽象支持多游戏、多深度学习后端（Keras / PyTorch）。  
+- 设计方式：通过 `Game` 与 `NeuralNet` 抽象解耦“通用训练逻辑”和“具体游戏/模型实现”，因此扩展新游戏时通常只需补齐对应接口实现。  
+
 ### Docker Installation
 For easy environment setup, we can use [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Once you have nvidia-docker set up, we can then simply run:
 ```
